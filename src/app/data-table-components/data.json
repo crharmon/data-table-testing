@@ -1,0 +1,122 @@
+[
+  {
+    "label": "salary",
+    "note": "monthly salary",
+    "category": "income",
+    "type": "income",
+    "amount": 5000,
+    "date": 1687651200000
+  },
+  {
+    "label": "groceries",
+    "note": "weekly grocery shopping",
+    "category": "food",
+    "type": "expense",
+    "amount": 150,
+    "date": 1687564800000
+  },
+  {
+    "label": "electricity bill",
+    "note": "monthly electricity bill",
+    "category": "utilities",
+    "type": "expense",
+    "amount": 100,
+    "date": 1687478400000
+  },
+  {
+    "label": "freelance work",
+    "note": "payment for freelance project",
+    "category": "income",
+    "type": "income",
+    "amount": 800,
+    "date": 1687392000000
+  },
+  {
+    "label": "rent",
+    "note": "monthly rent payment",
+    "category": "housing",
+    "type": "expense",
+    "amount": 1200,
+    "date": 1687305600000
+  },
+  {
+    "label": "gym membership",
+    "note": "monthly gym fee",
+    "category": "health",
+    "type": "expense",
+    "amount": 50,
+    "date": 1687219200000
+  },
+  {
+    "label": "restaurant",
+    "note": "dinner at a restaurant",
+    "category": "food",
+    "type": "expense",
+    "amount": 75,
+    "date": 1687132800000
+  },
+  {
+    "label": "internet bill",
+    "note": "monthly internet bill",
+    "category": "utilities",
+    "type": "expense",
+    "amount": 60,
+    "date": 1687046400000
+  },
+  {
+    "label": "transport",
+    "note": "public transport pass",
+    "category": "transport",
+    "type": "expense",
+    "amount": 40,
+    "date": 1686960000000
+  },
+  {
+    "label": "office supplies",
+    "note": "stationery items for office",
+    "category": "work",
+    "type": "expense",
+    "amount": 30,
+    "date": 1686873600000
+  },
+  {
+    "label": "concert tickets",
+    "note": "tickets for a concert",
+    "category": "entertainment",
+    "type": "expense",
+    "amount": 100,
+    "date": 1686787200000
+  },
+  {
+    "label": "car maintenance",
+    "note": "annual car servicing",
+    "category": "transport",
+    "type": "expense",
+    "amount": 200,
+    "date": 1686700800000
+  },
+  {
+    "label": "book purchase",
+    "note": "buying a new book",
+    "category": "education",
+    "type": "expense",
+    "amount": 25,
+    "date": 1686614400000
+  },
+  {
+    "label": "movie night",
+    "note": "tickets for a movie",
+    "category": "entertainment",
+    "type": "expense",
+    "amount": 30,
+    "date": 1686528000000
+  },
+  {
+    "label": "gift",
+    "note": "birthday gift for a friend",
+    "category": "gifts",
+    "type": "expense",
+    "amount": 50,
+    "date": 1686441600000
+  }
+]
