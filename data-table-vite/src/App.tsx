@@ -9,6 +9,7 @@ import { sampleData } from '@/components/data-table-components/samplet-data';
 
 import './App.css'
 import { Button } from "./components/ui/button";
+import { useParams } from "react-router-dom";
 
 // tip: optimize selectors by defining them externally when possible
 const selectTableData = (snapshot:any) => snapshot.context.tableData;
@@ -20,6 +21,9 @@ const handleClick = () => {
   })
 };
 function App() {
+  const urlParams = useParams<{ uiname: string }>();
+  console.log(urlParams);
+
   // We can subscribe to an actor to be notified whenever its state changes
   const tableData = useSelector(transactionsActor, selectTableData);
   const aState = useSelector(transactionsActor, selectAssigned);
@@ -32,9 +36,7 @@ function App() {
       </div>
      <p>Current state: {JSON.stringify(aState)}</p>
      <p>Current tableData: {JSON.stringify(tableData)}</p>
-     <Button
-     onClick={handleClick}
-     >Add Data</Button>
+     <Button onClick={handleClick}>Add Data</Button>
     </ThemeProvider>
   )
 }
