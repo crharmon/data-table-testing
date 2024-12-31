@@ -1,17 +1,13 @@
 
 
-import { assign, createActor, createMachine, setup } from 'xstate'
-import { sampleData } from '@/components/data-table-components/samplet-data';
+import { assign, createActor, setup } from 'xstate'
 import { Transaction } from '@/components/data-table-components/samplet-data';
-//import {sampleData} from "./data-table-components/samplet-data";
 const initialData: Transaction[] = [];
 export const machine = setup({
   actions: {
-    startDataRead: () => {
-      // Action to initiate JSON data reading
-      console.log("Reading JSON data...");
-      //assign({ tableData: ({ context }) => context.tableData = sampleData })
-    },
+    startDataUpdate: assign({
+      tableData: ({ event }) => event.tableData
+    }),
 
     eofReached: () => {
       // Action when EOF is reached
@@ -25,18 +21,25 @@ export const machine = setup({
    },  
   types: {
     context: {
-        tableData : initialData
+        tableData : initialData,
     },
-    
+    // TODO: Check if the event all need to have tableData
     events: {} as 
-     {type: 'data.start.read', } |
-     {type: 'data.eof.reached', } | 
-     {type: 'data.error.reading', },
+     {type: 'data.start.update',
+      tableData: Transaction[]
+      } |
+     {type: 'data.eof.reached', 
+      tableData: Transaction[]
+     } | 
+     {type: 'data.error.reading', 
+      tableData: Transaction[]
+     },
   }
 })
   .createMachine({
   context: {
-    tableData: sampleData
+    tableData: initialData,
+    assignedCalled: false
   },
   "id": "dataRead",
   initial: 'idle',
@@ -44,9 +47,9 @@ export const machine = setup({
     idle: {
       on: { 
         // .send({ type: 'data.start.read'})
-        'data.start.read':{
+        'data.start.update':{
           target: "readingJson",
-          actions: 'startDataRead'
+          actions: 'startDataUpdate'
       }
         //"description": "The machine is in a waiting state, ready to start reading JSON data."
     },
