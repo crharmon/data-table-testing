@@ -9,6 +9,7 @@ import { sampleData } from "@/components/data-table-components/samplet-data";
 import "./App.css";
 import { Button } from "./components/ui/button";
 import { useParams } from "react-router-dom";
+import React from "react";
 
 // tip: optimize selectors by defining them externally when possible
 const selectTableData = (snapshot: any) => snapshot.context.tableData;

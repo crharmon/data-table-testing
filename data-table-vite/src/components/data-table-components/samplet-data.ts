@@ -10,12 +10,12 @@ export interface Transaction {
 /**
  * Converts seconds since the epoch to an ISO 8601 string.
  *
- * @param seconds - The number of seconds since the epoch.
+ * @param milliseconds - The number of millis since the epoch.
  * @returns An ISO 8601 string representation of the given seconds.
  */
-function secondsToIso8601(seconds: number): string {
+function secondsToIso8601(milliseconds: number): string {
   // Convert seconds to a Date object
-  const date = new Date(seconds * 1000);
+  const date = new Date(milliseconds);
   
   // Use the toISOString() method to get the ISO 8601 string
   return date.toISOString();
