@@ -3,6 +3,7 @@ import {Timeline} from "./Timeline";
 import data from "./testData";
 
 // https://visjs.github.io/vis-timeline/docs/timeline/#Configuration_Options
+// Reference https://codesandbox.io/p/sandbox/peaceful-engelbart-l016f?file=%2Fsrc%2FApp.js%3A16%2C71
 
 const options = {
   // ...
