@@ -10,6 +10,7 @@ import { sampleData } from "@/components/data-table-components/samplet-data";
 import { Button } from "./components/ui/button";
 import { useParams } from "react-router-dom";
 import React from "react";
+import TestTimeline from "./components/react-vis-timeline/testTimeline";
 
 // tip: optimize selectors by defining them externally when possible
 const selectTableData = (snapshot: any) => snapshot.context.tableData;
@@ -31,6 +32,7 @@ function App() {
   transactionsActor.start();
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      <TestTimeline/>
       <div className="card">
         <DataTable data={tableData} columns={columns} />
       </div>
