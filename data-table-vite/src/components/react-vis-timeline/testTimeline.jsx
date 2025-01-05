@@ -5,7 +5,12 @@ import data from "./testData";
 // https://visjs.github.io/vis-timeline/docs/timeline/#Configuration_Options
 // Reference https://codesandbox.io/p/sandbox/peaceful-engelbart-l016f?file=%2Fsrc%2FApp.js%3A16%2C71
 
+// Alt Timeline example: https://codesandbox.io/p/sandbox/travel-history-parser-m09up?file=%2Fsrc%2Ftimeline.js%3A116%2C32-116%2C47
+
 const options = {
+//	groupHeightMode : 'fixed',
+	//width: '1500px',
+//	timeAxis: {scale: 'minute', step: 5}
   // ...
   // ...
 };

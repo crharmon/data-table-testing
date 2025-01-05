@@ -6,7 +6,7 @@ import { useSelector } from "@xstate/react";
 import { transactionsActor } from "./state/tranctionMachine";
 import { sampleData } from "@/components/data-table-components/samplet-data";
 
-import "./App.css";
+//import "./App.css";
 import { Button } from "./components/ui/button";
 import { useParams } from "react-router-dom";
 import React from "react";
