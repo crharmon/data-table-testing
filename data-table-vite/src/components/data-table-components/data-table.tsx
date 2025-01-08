@@ -24,8 +24,9 @@ import {
   TableHeader,
   TableRow
 } from "@/components/ui/table";
-
-import { DataTablePagination } from "./data-table-pagination";
+// purejs Table scrolling
+//https://jsfiddle.net/r753v2ky/ 
+//import { DataTablePagination } from "./data-table-pagination";
 import { DataTableToolbar } from "./data-table-toolbar";
 
 interface DataTableProps<TData, TValue> {
@@ -70,9 +71,9 @@ export function DataTable<TData, TValue>({
   return (
     <div className="space-y-4">
       <DataTableToolbar table={table} />
-      <div className="rounded-md border">
+      <div className="rounded-md border h-[25vh] relative overflow-auto">
         <Table>
-          <TableHeader>
+          <TableHeader className="sticky top-0 bg-muted">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
@@ -120,7 +121,7 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <DataTablePagination table={table} />
+      {/* <DataTablePagination table={table} /> */}
     </div>
   );
 }
