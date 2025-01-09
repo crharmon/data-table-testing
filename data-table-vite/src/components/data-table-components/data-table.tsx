@@ -62,7 +62,7 @@ export function DataTable<TData, TValue>({
     onColumnVisibilityChange: setColumnVisibility,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
+    //getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues()
@@ -71,6 +71,7 @@ export function DataTable<TData, TValue>({
   return (
     <div className="space-y-4">
       <DataTableToolbar table={table} />
+      {/* https://github.com/shadcn-ui/ui/issues/1151 */}
       <div className="rounded-md border h-[50vh] relative overflow-auto">
         <Table>
           <TableHeader className="sticky top-0 bg-muted">
