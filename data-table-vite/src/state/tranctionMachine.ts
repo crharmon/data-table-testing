@@ -1,4 +1,4 @@
-import { assign, createActor, setup } from "xstate";
+import { assign, createActor, log, setup } from "xstate";
 import { Transaction } from "@/components/data-table-components/samplet-data";
 const initialData: Transaction[] = [];
 export const machine = setup({
@@ -30,7 +30,6 @@ export const machine = setup({
 }).createMachine({
   context: {
     tableData: initialData,
-    assignedCalled: false,
   },
   id: "dataRead",
   initial: "idle",
@@ -40,7 +39,7 @@ export const machine = setup({
         // .send({ type: 'data.start.read'})
         "data.start.update": {
           target: "readingJson",
-          actions: "startDataUpdate",
+          actions: [log("Processing data.start.update"),"startDataUpdate"]
         },
         //"description": "The machine is in a waiting state, ready to start reading JSON data."
       },
@@ -66,3 +65,4 @@ export const machine = setup({
 });
 
 export const transactionsActor = createActor(machine);
+transactionsActor.start();

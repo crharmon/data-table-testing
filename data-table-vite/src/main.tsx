@@ -4,7 +4,7 @@ import { createBrowserRouter, RouterProvider} from 'react-router-dom';
 import './index.css';
 
 import App from './App';
-import TestTimeline from './components/react-vis-timeline/testTimeline';
+import TestTimeline from './components/react-vis-timeline/TimelineComponent';
 import React from 'react';
 
 const router = createBrowserRouter([
