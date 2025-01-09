@@ -10,6 +10,7 @@ import { useParams } from "react-router-dom";
 import { useSelector } from "@xstate/react";
 import { timelineActor } from "./state/timelineMachine";
 import TimelineComponent from "./components/react-vis-timeline/TimelineComponent";
+import { generatedTransactions } from "./components/data-table-components/generatedSample";
 
 /**
  * Converts a transaction to a Vis Timeline Item
@@ -39,12 +40,13 @@ const selectTableData = (snapshot: any): Transaction[] => {
 };
 
 function handleClick(): void {
+
   transactionsActor.send({
     type: "data.start.update",
-    tableData: sampleData,
+    tableData: generatedTransactions,
   });
 
-  const timelineItems: TimelineItem[] = sampleData.map(transactionToTimelineItem);
+  const timelineItems: TimelineItem[] = generatedTransactions.map(transactionToTimelineItem);
   timelineActor.send({
     type: "data.start.update",
     timelineItems,
