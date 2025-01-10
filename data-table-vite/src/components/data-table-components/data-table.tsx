@@ -26,6 +26,8 @@ import {
 } from "@/components/ui/table";
 // purejs Table scrolling
 //https://jsfiddle.net/r753v2ky/ 
+// Scrolling 
+//https://stackoverflow.com/questions/7852986/javascript-scroll-to-nth-row-in-a-table
 //import { DataTablePagination } from "./data-table-pagination";
 import { DataTableToolbar } from "./data-table-toolbar";
 
@@ -45,6 +47,7 @@ export function DataTable<TData, TValue>({
     []
   );
   const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [activeRows, setActiveRows] = React.useState({}); // State to track active rows
 
   const table = useReactTable({
     data,
@@ -68,12 +71,25 @@ export function DataTable<TData, TValue>({
     getFacetedUniqueValues: getFacetedUniqueValues()
   });
 
+  const handleRowClick = (rowIndex) => {
+    setActiveRows((prev) => ({ ...prev, [rowIndex]: !prev[rowIndex] })); // Toggle active state
+    // scroll row to mid
+    // line is zero-based
+    // line is the row number that you want to see into view after scroll 
+    console.log(table.getRowModel().rows[rowIndex]?.original);
+    const rows = document.querySelectorAll('#txWindowtableid tr');  
+    rows[rowIndex].scrollIntoView({
+      behavior: 'smooth',
+      block: 'center'
+  });
+  };
+
   return (
     <div className="space-y-4">
       <DataTableToolbar table={table} />
       {/* https://github.com/shadcn-ui/ui/issues/1151 */}
       <div className="rounded-md border h-[50vh] relative overflow-auto">
-        <Table>
+        <Table id='txWindowtableid'>
           <TableHeader className="sticky top-0 bg-muted">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
@@ -94,10 +110,12 @@ export function DataTable<TData, TValue>({
           </TableHeader>
           <TableBody>
             {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
+              table.getRowModel().rows.map((row, index) => (
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
+                  className={activeRows[index] ? 'active' : ''}
+                  onClick={() => handleRowClick(index)}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
