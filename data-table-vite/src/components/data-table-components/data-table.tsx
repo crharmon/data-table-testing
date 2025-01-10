@@ -24,10 +24,7 @@ import {
   TableHeader,
   TableRow
 } from "@/components/ui/table";
-// purejs Table scrolling
-//https://jsfiddle.net/r753v2ky/ 
-// Scrolling 
-//https://stackoverflow.com/questions/7852986/javascript-scroll-to-nth-row-in-a-table
+
 //import { DataTablePagination } from "./data-table-pagination";
 import { DataTableToolbar } from "./data-table-toolbar";
 
@@ -73,6 +70,10 @@ export function DataTable<TData, TValue>({
 
   const handleRowClick = (rowIndex) => {
     setActiveRows((prev) => ({ ...prev, [rowIndex]: !prev[rowIndex] })); // Toggle active state
+    // purejs Table scrolling
+    //https://jsfiddle.net/r753v2ky/ 
+    // Scrolling 
+    //https://stackoverflow.com/questions/7852986/javascript-scroll-to-nth-row-in-a-table
     // scroll row to mid
     // line is zero-based
     // line is the row number that you want to see into view after scroll 
