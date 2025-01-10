@@ -11,7 +11,7 @@ import {
   getFacetedRowModel,
   getFacetedUniqueValues,
   getFilteredRowModel,
-  getPaginationRowModel,
+  //getPaginationRowModel,
   getSortedRowModel,
   useReactTable
 } from "@tanstack/react-table";
