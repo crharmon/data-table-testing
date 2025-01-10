@@ -20,6 +20,10 @@ export const timelineOptions: TimelineOptions = {
     axis: "both",
     // item: "top"
   },
+  rollingMode: {
+    follow: true,
+    offset: 0.1
+  },
   start: moment()
     .subtract(4, "days")
     .format(),
