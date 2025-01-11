@@ -7,34 +7,42 @@ import moment from "moment";
 import { TimelineOptions } from "vis-timeline";
 import { transactionsActor } from "@/state/tranctionMachine";
 
-// https://visjs.github.io/vis-timeline/docs/timeline/#Configuration_Options
-// Reference https://codesandbox.io/p/sandbox/peaceful-engelbart-l016f?file=%2Fsrc%2FApp.js%3A16%2C71
-// Alt Timeline example: https://codesandbox.io/p/sandbox/travel-history-parser-m09up?file=%2Fsrc%2Ftimeline.js%3A116%2C32-116%2C47
-
-let groups = [
-  { content: "Income", id: "Income", value: 1, className: "income" },
-  { content: "Expense", id: "Expense", value: 2, className: "expense" },
+// Timeline groups
+const groups = [
+  {
+    content: "Income",
+    id: "Income",
+    value: 1,
+    className: "income",
+  },
+  {
+    content: "Expense",
+    id: "Expense",
+    value: 2,
+    className: "expense",
+  },
 ];
 
-const selectTimelineItems = (snapshot:any) => snapshot.context.timelineItems;
-
-//https://visjs.github.io/vis-timeline/examples/timeline/interaction/eventListeners.html
-// timeline.on('select', function (properties) {
-//   logEvent('select', properties);
-// });
-
-//https://visjs.github.io/vis-timeline/examples/timeline/interaction/animateWindow.html
-//timeline.focus(2);
+/**
+ * Selects the timeline items from the state snapshot
+ *
+ * @param snapshot - The React Context snapshot
+ */
+const selectTimelineItems = (snapshot: any): any[] => {
+  return snapshot.context.timelineItems;
+};
 
 // TSX
 export default function TimelineComponent() {
   // Reference to Timeline object
-  const timelineRef:React.MutableRefObject<any> = useRef(null);
+  const timelineRef = useRef(null);
 
-  // Send FSM reference after is updated by ./Timeline
-  const updateTimelineRef =() => {
-    timelineActor.send({ type: 'timeline.ready', newTimelineRef: timelineRef});
-  }
+  /**
+   * Sends the updated timeline reference to the FSM after it's updated by ./Timeline
+   */
+  const updateTimelineRef = () => {
+    timelineActor.send({ type: "timeline.ready", newTimelineRef: timelineRef });
+  };
 
   // Timeline options
   const localTimelineOptions: TimelineOptions = {
@@ -52,11 +60,11 @@ export default function TimelineComponent() {
       axis: "both",
       // item: "top"
     },
-    
-    rollingMode: {
-      follow: true,
-      offset: 0.1
-    },
+    // TODO: Fix maybe
+    // rollingMode: {
+    //   follow: true,
+    //   offset: 0.1,
+    // },
     start: moment()
       .subtract(4, "days")
       .format(),
@@ -72,27 +80,33 @@ export default function TimelineComponent() {
     zoomMax: 51840000000,
   };
 
-  // Send Selected Event to FSM with ID
-  const timelineSelectHandler =  (properties) => {
-    //console.log( timelineRef.current.timeline.getCurrentTime() )
-    timelineActor.send({
-      type: "item.selected.from.timeline",
-       id: properties?.items[0]})
-    transactionsActor.send({
-      type: "row.selected.from.table", 
-      id: properties?.items[0] 
-  })
-  }
+  /**
+   * Handles the selection of an item in the timeline
+   *
+   * @param properties - The selected item's properties
+   */
+  const timelineSelectHandler = (properties) => {
+    if (properties?.items.length > 0) {
+      timelineActor.send({
+        type: "item.selected.from.timeline",
+        id: properties.items[0],
+      });
+      transactionsActor.send({
+        type: "row.selected.from.table",
+        id: properties.items[0],
+      });
+    }
+  };
+
   const timelineItems = useSelector(timelineActor, selectTimelineItems);
- 
+
   return (
-    <Timeline 
+    <Timeline
       ref={timelineRef}
       initialItems={timelineItems}
-      initialGroups={groups} 
-      options={localTimelineOptions} 
+      initialGroups={groups}
+      options={localTimelineOptions}
       selectHandler={timelineSelectHandler}
-      
     />
   );
 }

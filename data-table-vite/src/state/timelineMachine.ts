@@ -1,14 +1,29 @@
+import { IdType, TimelineItem, TimelineOptions } from "vis-timeline";
 import { assign, createActor, log, setup } from "xstate";
-import { IdType, TimelineItem } from "vis-timeline";
 
+// Constants for initial data and reference
 const initialData: TimelineItem[] = [];
-const nulRef: React.MutableRefObject<any> = null;
+const nullRef: React.MutableRefObject<any> = null;
 
+// Define the types of events that can be sent to the machine
 export const machine = setup({
+  actions: {
+    stopFollowingCurrentTime:({ context }) => {
+      const timeline = context.timelineRef.current?.timeline;
+      // Stop rolling with current time
+      const nonRolling:TimelineOptions = {
+        rollingMode: {
+          follow: false,
+          offset: 0.1
+        }
+      };
+      timeline.setOptions( nonRolling );
+    }
+  },
   types: {
     context: {
       timelineItems: initialData,
-      timelineRef: nulRef,
+      timelineRef: nullRef,
     },
     events: {} as
       | { type: "data.start.update"; newTimelineItems: TimelineItem[] }
@@ -17,35 +32,36 @@ export const machine = setup({
       | { type: "timeline.ready"; newTimelineRef: React.MutableRefObject<any> },
   },
 })
+// Create the machine with the defined states and events
 .createMachine({
   context: {
     timelineItems: initialData,
-    timelineRef: nulRef,
+    timelineRef: nullRef,
   },
   id: "timelineTest",
   initial: "idle",
   states: {
     idle: {
-      on:{
-        // .send({ type: 'timeline.ready'})
-        "timeline.ready":{
+      on: {
+        // Handle event 'timeline.ready'
+        "timeline.ready": {
           target: "ready",
           actions: [
-            log("Processing timeline.ready"),
+            log("Processing timeline_ready"),
             assign({
               timelineRef: ({ event }) => event.newTimelineRef,
             }),
-          ]
-        }
-      }
+          ],
+        },
+      },
     },
-    ready:{
+    ready: {
       on: {
-        // .send({ type: 'data.start.update'})
+        // Handle event 'data.start.update'
         "data.start.update": {
           target: "dataReceived",
           actions: [
-            log("Processing data.start.update"),
+            log("Processing data_start_update"),
             assign({
               timelineItems: ({ event }) => event.newTimelineItems,
             }),
@@ -54,36 +70,43 @@ export const machine = setup({
       },
     },
     dataReceived: {
-      on:{
-        // .send({ type: 'item.selected.from.table'})
+      on: {
+        // Handle event 'item.selected.from.table'
         "item.selected.from.table": {
           actions: [
-            log("Processing item.selected.from.table"),
-            ({context , event}) =>{
+            log("Processing item_selected_from_table"),
+            // Stop following current time (should be reusable)
+            ({ context, event }) => {
               console.log(context);
               console.log(event);
-              const timeline = context.timelineRef.current.timeline;
-              const selectedId = event.id;
-              // Clear selected
-              timeline.setSelection([]);
-              // Set selected
-              timeline.setSelection([selectedId])
-              // Move item into view
-              timeline.focus(selectedId);
+              const timeline = context.timelineRef.current?.timeline;
+              if (timeline) {
+                const selectedId = event.id;
+                // Clear selected
+                timeline.setSelection([]);
+                // Set selected
+                timeline.setSelection([selectedId]);
+                
+                // Move item into view
+                timeline.focus(selectedId);
+                
+              }
             },
-          ]
+          ],
         },
-        // .send({ type: 'item.selected.from.timeline'})
+        // Handle event 'item.selected.from.timeline'
         "item.selected.from.timeline": {
           actions: [
-            log("Processing item.selected.from.timeline"),
-          ]
+            log("Processing item_selected_from_timeline"),
+          ],
         },
-      }
-      //type: "final",
+      },
     },
   },
 });
 
+// Create the actor from the machine
 export const timelineActor = createActor(machine);
+
+// Start the actor
 timelineActor.start();

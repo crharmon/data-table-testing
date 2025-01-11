@@ -1,92 +1,126 @@
 import { assertEvent, assign, createActor, log, setup } from "xstate";
 import { Transaction } from "@/components/data-table-components/samplet-data";
+
+// Constants for initial data and reference
 const initialData: Transaction[] = [];
-const initialSelectedIds: string[] =[]
-export const transactionTableRowId = "transactionTableRow-";
+const initialSelectedIds: string[] = [];
+
+// Constants for transaction row IDs
+export const TRANSACTION_ROW_ID_PREFIX = "transactionTableRow-";
+
+/**
+ * Machine configuration for reading transactions.
+ */
 export const machine = setup({
   actions: {
+    /**
+     * Action to update the table data on start of a new data update event.
+     *
+     * @param {object} event - The event that triggered this action.
+     * @returns {Transaction[]} The updated table data.
+     */
     startDataUpdate: assign({
       tableData: ({ event }) => {
         assertEvent(event, "data.start.update");
         return event.tableData;
-      }
+      },
     }),
+    /**
+     * Action to update the selected IDs on row selection from table or timeline.
+     *
+     * @param {object} params - The parameters for this action.
+     */
     startDataUpdate2: (_, params: { newTableData: Transaction[] }) => {
-      
+      // TODO: implement logic here currently inline action
     },
   },
   types: {
+    /**
+     * Context type for the machine.
+     */
     context: {
       tableData: initialData,
       selectedIds: initialSelectedIds,
     },
-    // TODO: Check if the event all need to have tableData
+    /**
+     * Event types for the machine.
+     */
     events: {} as
       | { type: "data.start.update"; tableData: Transaction[] }
-      | { type: "data.eof.reached";  }
-      | { type: "row.selected.from.table"; id: string;}
-      | { type: "row.selected.from.timeline"; id: string; }
-      | { type: "data.error.reading";  },
+      | { type: "data.eof.reached" }
+      | { type: "row.selected.from.table"; id: string }
+      | { type: "row.selected.from.timeline"; id: string }
+      | { type: "data.error.reading" },
   },
 }).createMachine({
+  /**
+   * Context for the machine.
+   */
   context: {
     tableData: initialData,
     selectedIds: initialSelectedIds,
   },
+  /**
+   * ID of the machine.
+   */
   id: "dataRead",
+  /**
+   * Initial state of the machine.
+   */
   initial: "idle",
+  /**
+   * States for the machine.
+   */
   states: {
     idle: {
       on: {
-        // .send({ type: 'data.start.read'})
+        // Event to start reading data
         "data.start.update": {
           target: "dataReceived",
-          actions: [log("Processing data.start.update"),"startDataUpdate"]
+          actions: [log("Processing data.start.update"), "startDataUpdate"],
         },
-        //"description": "The machine is in a waiting state, ready to start reading JSON data."
       },
     },
     dataReceived: {
       on: {
-     // .send({ type: 'item.selected.from.table'})
-    // purejs Table scrolling
-    //https://jsfiddle.net/r753v2ky/ 
-    // Scrolling 
-    //https://stackoverflow.com/questions/7852986/javascript-scroll-to-nth-row-in-a-table
-    // scroll row to mid
-     "row.selected.from.table": {
-      actions: [
-        log("Processing item.selected.from.table"),
-        ({context , event}) => {
-          // Send row id in selected event
-            console.log(event.id);
-                const row = document.querySelector(`#${transactionTableRowId + event.id}`);  
+        /**
+         * Event to select a row from the table.
+         */
+        "row.selected.from.table": {
+          actions: [
+            log("Processing item.selected.from.table"),
+            ({ context, event }) => {
+              console.log(event.id);
+              const row = document.querySelector(
+                `#${TRANSACTION_ROW_ID_PREFIX}${event.id}`
+              );
+              if (row) {
                 row.scrollIntoView({
-                  behavior: 'smooth',
-                  block: 'center'
-              });
+                  behavior: "smooth",
+                  block: "center",
+                });
+              }
+            },
+            assign({
+              selectedIds: ({ event }) => [event.id],
+            }),
+          ],
         },
-        assign({
-          selectedIds: ({ event }) => {
-            return [event.id];
-          }
-        })
-      ]
-    },
-    // .send({ type: 'item.selected.from.timeline'})
-    "row.selected.from.*": {
-      actions: [
-        log("Processing item.selected.from.*"),
-      ]
-    },
-  }
-    },
-    readComplete: {
-      type: "final",
-      //"description": "The machine has successfully completed reading the JSON data. This is a final state."
+        /**
+         * Event to select a row from the timeline.
+         */
+        "row.selected.from.*": {
+          actions: [log("Processing item.selected.from.*")],
+        },
+      },
     },
   },
 });
 
+/**
+ * Actor created from the machine.
+ */
 export const transactionsActor = createActor(machine);
+
+// Start the actor
 transactionsActor.start();

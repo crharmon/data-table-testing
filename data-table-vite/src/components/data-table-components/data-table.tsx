@@ -1,5 +1,4 @@
-"use client";
-
+// Import necessary modules and components from React and @tanstack/react-table
 import * as React from "react";
 import {
   ColumnDef,
@@ -11,11 +10,11 @@ import {
   getFacetedRowModel,
   getFacetedUniqueValues,
   getFilteredRowModel,
-  //getPaginationRowModel,
   getSortedRowModel,
   useReactTable
 } from "@tanstack/react-table";
 
+// Import UI components from @/components/ui/table
 import {
   Table,
   TableBody,
@@ -25,33 +24,58 @@ import {
   TableRow
 } from "@/components/ui/table";
 
-//import { DataTablePagination } from "./data-table-pagination";
+// Import custom DataTableToolbar component
 import { DataTableToolbar } from "./data-table-toolbar";
+
+// Define the properties interface for the DataTable component
 interface DataTableProps<TData, TValue> {
+  /**
+   * An array of column definitions for the table.
+   */
   columns: ColumnDef<TData, TValue>[];
+  /**
+   * The data to be displayed in the table.
+   */
   data: TData[];
+  /**
+   * The transaction row ID used for unique rows.
+   */
   transactionTableRowId: string;
-  handleRowClick: (rowData: TData, index:number) => void;
+  /**
+   * A callback function triggered when a row is clicked.
+   *
+   * @param rowData The data of the clicked row.
+   * @param index The index of the clicked row in the table.
+   */
+  handleRowClick: (rowData: TData, index: number) => void;
+  /**
+   * The CSS height value for the table.
+   */
   heightCss: string;
+  /**
+   * An array of selected IDs.
+   */
   selectedIds: string[];
 }
 
+// Define the DataTable component
 export function DataTable<TData, TValue>({
   columns,
   data,
-  transactionTableRowId: transactionTableRowId,
+  transactionTableRowId,
   handleRowClick,
   heightCss,
-  selectedIds,
+  selectedIds = []
 }: DataTableProps<TData, TValue>) {
+  // Initialize state variables for row selection and column visibility
   const [rowSelection, setRowSelection] = React.useState({});
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  );
+  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
+
+  // Initialize state variables for column filters and sorting
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [sorting, setSorting] = React.useState<SortingState>([]);
 
+  // Use the useReactTable hook to initialize the table with the provided data and columns
   const table = useReactTable({
     data,
     columns,
@@ -68,17 +92,25 @@ export function DataTable<TData, TValue>({
     onColumnVisibilityChange: setColumnVisibility,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-    //getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues()
   });
-  const tableClassNames = `rounded-md border h-${heightCss} relative overflow-auto`;
+
+  // Define CSS class names for the table and selected row
+  const tableClassNames = `rounded-md border ${heightCss} relative overflow-auto`;
   const selectedRowClassNames = 'border-4 border-gray-500';
-  function getRowData (index:number):any {
-    return table.getRowModel().rows[index]?.original
+
+  /**
+   * Get the data of a row at the specified index.
+   *
+   * @param index The index of the row to retrieve data for.
+   */
+  function getRowData(index: number): any {
+    return table.getRowModel().rows[index]?.original;
   }
 
+  // Render the DataTable component
   return (
     <div className="space-y-4">
       <DataTableToolbar table={table} />
@@ -108,8 +140,12 @@ export function DataTable<TData, TValue>({
               table.getRowModel().rows.map((row, index) => (
                 <TableRow
                   key={row.id}
-                  data-state={selectedIds[getRowData(index)?.id]  && "selected"}
-                  id={transactionTableRowId + row.id}
+                  data-state={
+                    selectedIds.indexOf(getRowData(index)?.id) > -1
+                      ? "selected"
+                      : undefined
+                  }
+                  id={`${transactionTableRowId}${getRowData(index)?.id}`}
                   className={selectedIds.indexOf(getRowData(index)?.id) > -1 ? selectedRowClassNames : ""}
                   onClick={() => handleRowClick(getRowData(index), index)}
                 >
@@ -127,16 +163,15 @@ export function DataTable<TData, TValue>({
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
-                  className="h-24 text-center"
+                  className="text-center"
                 >
-                  No results.
+                  No data available.
                 </TableCell>
               </TableRow>
             )}
           </TableBody>
         </Table>
       </div>
-      {/* <DataTablePagination table={table} /> */}
     </div>
   );
 }
