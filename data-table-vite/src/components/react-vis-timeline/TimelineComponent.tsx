@@ -5,6 +5,7 @@ import { timelineActor } from "@/state/timelineMachine";
 import { Timeline } from "./Timeline";
 import moment from "moment";
 import { TimelineOptions } from "vis-timeline";
+import { transactionsActor } from "@/state/tranctionMachine";
 
 // https://visjs.github.io/vis-timeline/docs/timeline/#Configuration_Options
 // Reference https://codesandbox.io/p/sandbox/peaceful-engelbart-l016f?file=%2Fsrc%2FApp.js%3A16%2C71
@@ -74,7 +75,13 @@ export default function TimelineComponent() {
   // Send Selected Event to FSM with ID
   const timelineSelectHandler =  (properties) => {
     //console.log( timelineRef.current.timeline.getCurrentTime() )
-    timelineActor.send({type: "item.selected.from.timeline", id: properties?.items[0]})
+    timelineActor.send({
+      type: "item.selected.from.timeline",
+       id: properties?.items[0]})
+    transactionsActor.send({
+      type: "row.selected.from.table", 
+      id: properties?.items[0] 
+  })
   }
   const timelineItems = useSelector(timelineActor, selectTimelineItems);
  

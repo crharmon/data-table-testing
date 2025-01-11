@@ -7,7 +7,6 @@ import { TimelineItem } from "vis-timeline";
 import { useParams } from "react-router-dom";
 import { timelineActor } from "./state/timelineMachine";
 import TimelineComponent from "./components/react-vis-timeline/TimelineComponent";
-import { generatedTransactions } from "./components/data-table-components/generatedSample";
 import DataTableComponent from "./components/data-table-components/data-table-component";
 
 /**

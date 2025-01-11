@@ -27,21 +27,22 @@ import {
 
 //import { DataTablePagination } from "./data-table-pagination";
 import { DataTableToolbar } from "./data-table-toolbar";
-
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  transactionTableid: string;
+  transactionTableRowId: string;
   handleRowClick: (rowData: TData, index:number) => void;
   heightCss: string;
+  selectedIds: string[];
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
-  transactionTableid,
+  transactionTableRowId: transactionTableRowId,
   handleRowClick,
-  heightCss
+  heightCss,
+  selectedIds,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
@@ -50,7 +51,6 @@ export function DataTable<TData, TValue>({
     []
   );
   const [sorting, setSorting] = React.useState<SortingState>([]);
-  //const [activeRows, setActiveRows] = React.useState({}); // State to track active rows
 
   const table = useReactTable({
     data,
@@ -73,13 +73,18 @@ export function DataTable<TData, TValue>({
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues()
   });
-  const tableClassNames = `rounded-md border h-${heightCss} relative overflow-auto`
+  const tableClassNames = `rounded-md border h-${heightCss} relative overflow-auto`;
+  const selectedRowClassNames = 'border-4 border-gray-500';
+  function getRowData (index:number):any {
+    return table.getRowModel().rows[index]?.original
+  }
+
   return (
     <div className="space-y-4">
       <DataTableToolbar table={table} />
       {/* https://github.com/shadcn-ui/ui/issues/1151 */}
       <div className={tableClassNames}>
-        <Table id={transactionTableid}>
+        <Table>
           <TableHeader className="sticky top-0 bg-muted">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
@@ -103,10 +108,10 @@ export function DataTable<TData, TValue>({
               table.getRowModel().rows.map((row, index) => (
                 <TableRow
                   key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                  //TODO
-                  //className={activeRows[index] ? 'active' : ''}
-                  onClick={() => handleRowClick(table.getRowModel().rows[index]?.original, index)}
+                  data-state={selectedIds[getRowData(index)?.id]  && "selected"}
+                  id={transactionTableRowId + row.id}
+                  className={selectedIds.indexOf(getRowData(index)?.id) > -1 ? selectedRowClassNames : ""}
+                  onClick={() => handleRowClick(getRowData(index), index)}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>

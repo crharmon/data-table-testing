@@ -86,8 +86,8 @@ body, html {
 }
 
 .vis-item.vis-selected {
-  border-color: #f8cb00 !important;
-  background-color: #f8cb00 !important;
+  border-color: #a0aec0 !important;
+  background-color: #a0aec0 !important;
   transition: all 0.3s ease;
 }
 
