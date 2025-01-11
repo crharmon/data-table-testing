@@ -49,7 +49,7 @@ function handleClick(): void {
   const timelineItems: TimelineItem[] = generatedTransactions.map(transactionToTimelineItem);
   timelineActor.send({
     type: "data.start.update",
-    timelineItems,
+    newTimelineItems: timelineItems,
   });
 }
 

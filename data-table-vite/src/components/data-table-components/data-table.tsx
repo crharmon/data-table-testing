@@ -27,6 +27,7 @@ import {
 
 //import { DataTablePagination } from "./data-table-pagination";
 import { DataTableToolbar } from "./data-table-toolbar";
+import { timelineActor } from "@/state/timelineMachine";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -69,6 +70,7 @@ export function DataTable<TData, TValue>({
   });
 
   const handleRowClick = (rowIndex) => {
+   
     setActiveRows((prev) => ({ ...prev, [rowIndex]: !prev[rowIndex] })); // Toggle active state
     // purejs Table scrolling
     //https://jsfiddle.net/r753v2ky/ 
@@ -77,7 +79,10 @@ export function DataTable<TData, TValue>({
     // scroll row to mid
     // line is zero-based
     // line is the row number that you want to see into view after scroll 
-    console.log(table.getRowModel().rows[rowIndex]?.original);
+    const rowdata:any = table.getRowModel().rows[rowIndex]?.original
+    // Send row id in selected event
+    console.log(rowdata.id);
+    timelineActor.send({type:"item.selected.from.table", id: rowdata.id })
     const rows = document.querySelectorAll('#txWindowtableid tr');  
     rows[rowIndex].scrollIntoView({
       behavior: 'smooth',
