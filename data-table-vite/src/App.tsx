@@ -1,16 +1,14 @@
 import React from "react";
 import { Button } from "./components/ui/button";
 import { ThemeProvider } from "@/components/theme-provider";
-import { DataTable } from "@/components/data-table-components/data-table";
-import { columns } from "@/components/data-table-components/columns";
 import { transactionsActor } from "./state/tranctionMachine";
-import { Transaction, sampleData } from "./components/data-table-components/samplet-data";
+import { Transaction } from "./components/data-table-components/samplet-data";
 import { TimelineItem } from "vis-timeline";
 import { useParams } from "react-router-dom";
-import { useSelector } from "@xstate/react";
 import { timelineActor } from "./state/timelineMachine";
 import TimelineComponent from "./components/react-vis-timeline/TimelineComponent";
 import { generatedTransactions } from "./components/data-table-components/generatedSample";
+import DataTableComponent from "./components/data-table-components/data-table-component";
 
 /**
  * Converts a transaction to a Vis Timeline Item
@@ -30,15 +28,6 @@ function transactionToTimelineItem(transaction: Transaction): TimelineItem {
   };
 }
 
-/**
- * Selects the table data from the state snapshot
- *
- * @param snapshot - The React Context snapshot
- */
-const selectTableData = (snapshot: any): Transaction[] => {
-  return snapshot.context.tableData;
-};
-
 function handleClick(): void {
 
   transactionsActor.send({
@@ -57,9 +46,6 @@ function App() {
   const urlParams = useParams<{uiname:string}>();
   console.log(urlParams);
 
-  //We can sub to actor for changes
-  const tableData = useSelector(transactionsActor, selectTableData);
-
   return (
     <ThemeProvider
       defaultTheme="dark"
@@ -67,7 +53,7 @@ function App() {
     >
       <TimelineComponent />
       <div className="card">
-        <DataTable data={tableData} columns={columns} />
+        <DataTableComponent/>
       </div>
       {/* <p>Current tableData: {JSON.stringify(tableData)}</p> */}
       <Button onClick={handleClick}>Add Data</Button>

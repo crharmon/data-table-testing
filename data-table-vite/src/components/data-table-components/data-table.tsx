@@ -70,7 +70,6 @@ export function DataTable<TData, TValue>({
   });
 
   const handleRowClick = (rowIndex) => {
-   
     setActiveRows((prev) => ({ ...prev, [rowIndex]: !prev[rowIndex] })); // Toggle active state
     // purejs Table scrolling
     //https://jsfiddle.net/r753v2ky/ 

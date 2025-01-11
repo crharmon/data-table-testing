@@ -73,7 +73,6 @@ export default function TimelineComponent() {
 
   // Send Selected Event to FSM with ID
   const timelineSelectHandler =  (properties) => {
-    //console.log(properties?.items[0]);
     //console.log( timelineRef.current.timeline.getCurrentTime() )
     timelineActor.send({type: "item.selected.from.timeline", id: properties?.items[0]})
   }
