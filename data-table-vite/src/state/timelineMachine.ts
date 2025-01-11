@@ -1,6 +1,5 @@
 import { assign, createActor, log, setup } from "xstate";
 import { IdType, TimelineItem } from "vis-timeline";
-import React, { useRef } from "react";
 
 const initialData: TimelineItem[] = [];
 const nulRef: React.MutableRefObject<any> = null;
