@@ -20,7 +20,7 @@ const selectTableData = (snapshot: any): Transaction[] => {
       //We can sub to actor for changes
       const tableData = useSelector(transactionsActor, selectTableData);
    return (
-    <DataTable data={tableData} columns={columns} />
+    <DataTable data={tableData} columns={columns} transactionTableid="transactionTableHere" />
    );
  }
  

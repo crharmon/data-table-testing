@@ -32,11 +32,13 @@ import { timelineActor } from "@/state/timelineMachine";
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  transactionTableid: string;
 }
 
 export function DataTable<TData, TValue>({
   columns,
-  data
+  data,
+  transactionTableid,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
@@ -82,7 +84,7 @@ export function DataTable<TData, TValue>({
     // Send row id in selected event
     console.log(rowdata.id);
     timelineActor.send({type:"item.selected.from.table", id: rowdata.id })
-    const rows = document.querySelectorAll('#txWindowtableid tr');  
+    const rows = document.querySelectorAll(`#${transactionTableid} tr`);  
     rows[rowIndex].scrollIntoView({
       behavior: 'smooth',
       block: 'center'
@@ -94,7 +96,7 @@ export function DataTable<TData, TValue>({
       <DataTableToolbar table={table} />
       {/* https://github.com/shadcn-ui/ui/issues/1151 */}
       <div className="rounded-md border h-[50vh] relative overflow-auto">
-        <Table id='txWindowtableid'>
+        <Table id={transactionTableid}>
           <TableHeader className="sticky top-0 bg-muted">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
