@@ -1,3 +1,5 @@
+import { generateDataMillis } from "./generatedSample";
+
 export interface Transaction {
   id: string;
   label: string;
@@ -13,7 +15,7 @@ export interface Transaction {
  * @param milliseconds - The number of millis since the epoch.
  * @returns An ISO 8601 string representation of the given seconds.
  */
-function secondsToIso8601(milliseconds: number): string {
+function millisToIso8601(milliseconds: number): string {
   // Convert seconds to a Date object
   const date = new Date(milliseconds);
   
@@ -29,7 +31,7 @@ function secondsToIso8601(milliseconds: number): string {
       category: "income",
       type: "income",
       amount: 5000,
-      date: secondsToIso8601(1687651200000),
+      date: millisToIso8601(generateDataMillis()),
     },
     {
       id: "2",
@@ -38,7 +40,7 @@ function secondsToIso8601(milliseconds: number): string {
       category: "food",
       type: "expense",
       amount: 150,
-      date: secondsToIso8601(1687564800000),
+      date: millisToIso8601(generateDataMillis()),
     },
     {
       id: "3",
@@ -47,7 +49,7 @@ function secondsToIso8601(milliseconds: number): string {
       category: "utilities",
       type: "expense",
       amount: 100,
-      date: secondsToIso8601(1687478400000),
+      date: millisToIso8601(generateDataMillis()),
     },
     {
       id: "4",
@@ -56,7 +58,7 @@ function secondsToIso8601(milliseconds: number): string {
       category: "income",
       type: "income",
       amount: 800,
-      date: secondsToIso8601(1687392000000),
+      date: millisToIso8601(generateDataMillis()),
     },
     {
       id: "5",
@@ -65,7 +67,7 @@ function secondsToIso8601(milliseconds: number): string {
       category: "housing",
       type: "expense",
       amount: 1200,
-      date: secondsToIso8601(1687305600000),
+      date: millisToIso8601(generateDataMillis()),
     },
     {
       id: "6",
@@ -74,7 +76,7 @@ function secondsToIso8601(milliseconds: number): string {
       category: "health",
       type: "expense",
       amount: 50,
-      date: secondsToIso8601(1687219200000),
+      date: millisToIso8601(generateDataMillis()),
     },
     {
       id: "7",
@@ -83,7 +85,7 @@ function secondsToIso8601(milliseconds: number): string {
       category: "food",
       type: "expense",
       amount: 75,
-      date: secondsToIso8601(1687132800000),
+      date: millisToIso8601(generateDataMillis()),
     },
     {
       id: "8",
@@ -92,7 +94,7 @@ function secondsToIso8601(milliseconds: number): string {
       category: "utilities",
       type: "expense",
       amount: 60,
-      date: secondsToIso8601(1687046400000),
+      date: millisToIso8601(generateDataMillis()),
     },
     {
       id: "9",
@@ -101,7 +103,7 @@ function secondsToIso8601(milliseconds: number): string {
       category: "transport",
       type: "expense",
       amount: 40,
-      date: secondsToIso8601(1686960000000),
+      date: millisToIso8601(generateDataMillis()),
     },
     {
       id: "10",
@@ -110,7 +112,7 @@ function secondsToIso8601(milliseconds: number): string {
       category: "work",
       type: "expense",
       amount: 30,
-      date: secondsToIso8601(1686873600000),
+      date: millisToIso8601(generateDataMillis()),
     },
     {
       id: "11",
@@ -119,7 +121,7 @@ function secondsToIso8601(milliseconds: number): string {
       category: "entertainment",
       type: "expense",
       amount: 100,
-      date: secondsToIso8601(1686787200000),
+      date: millisToIso8601(generateDataMillis()),
     },
     {
       id: "12",
@@ -128,7 +130,7 @@ function secondsToIso8601(milliseconds: number): string {
       category: "transport",
       type: "expense",
       amount: 200,
-      date: secondsToIso8601(1686700800000),
+      date: millisToIso8601(generateDataMillis()),
     },
     {
       id: "13",
@@ -137,7 +139,7 @@ function secondsToIso8601(milliseconds: number): string {
       category: "education",
       type: "expense",
       amount: 25,
-      date: secondsToIso8601(1686614400000),
+      date: millisToIso8601(generateDataMillis()),
     },
     {
       id: "14",
@@ -146,7 +148,7 @@ function secondsToIso8601(milliseconds: number): string {
       category: "entertainment",
       type: "expense",
       amount: 30,
-      date: secondsToIso8601(1686528000000),
+      date: millisToIso8601(generateDataMillis()),
     },
     {
       id: "15",
@@ -155,6 +157,6 @@ function secondsToIso8601(milliseconds: number): string {
       category: "gifts",
       type: "expense",
       amount: 50,
-      date: secondsToIso8601(1686441600000),
+      date: millisToIso8601(generateDataMillis()),
     },
   ];

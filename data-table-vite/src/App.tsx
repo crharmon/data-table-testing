@@ -2,7 +2,7 @@ import React from "react";
 import { Button } from "./components/ui/button";
 import { ThemeProvider } from "@/components/theme-provider";
 import { transactionsActor } from "./state/tranctionMachine";
-import { Transaction } from "./components/data-table-components/samplet-data";
+import { sampleData, Transaction } from "./components/data-table-components/samplet-data";
 import { TimelineItem } from "vis-timeline";
 import { useParams } from "react-router-dom";
 import { timelineActor } from "./state/timelineMachine";
@@ -32,10 +32,10 @@ function handleClick(): void {
 
   transactionsActor.send({
     type: "data.start.update",
-    tableData: generatedTransactions,
+    tableData: sampleData,
   });
 
-  const timelineItems: TimelineItem[] = generatedTransactions.map(transactionToTimelineItem);
+  const timelineItems: TimelineItem[] = sampleData.map(transactionToTimelineItem);
   timelineActor.send({
     type: "data.start.update",
     newTimelineItems: timelineItems,

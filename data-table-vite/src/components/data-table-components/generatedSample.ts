@@ -21,7 +21,7 @@ function generateIncomeTransaction(): Transaction {
     const label: string = generateIncomeLabel();
     const note = generateNote(label, category);
     const amount: number = generateRandomAmount(500, 9999); // Use the new function
-    const dateMillis = Math.floor(Date.now()) + Math.floor(Math.random() * moment.duration(7, 'days').asMilliseconds());
+    const dateMillis =  generateDataMillis();
     const date: string = new Date(dateMillis).toISOString();
     return {
       id: uuidv4(),
@@ -47,7 +47,7 @@ function generateIncomeTransaction(): Transaction {
     const label: string = generateExpenseLabel();
     const note = generateNote(label, category);
     const amount: number = generateRandomAmount(500, 9999); // Use the new function
-    const dateMillis = Math.floor(Date.now()) + Math.floor(Math.random() * moment.duration(7, 'days').asMilliseconds());
+    const dateMillis = generateDataMillis();
     const date: string = new Date(dateMillis).toISOString();
     return {
       id: uuidv4(),
@@ -59,6 +59,10 @@ function generateIncomeTransaction(): Transaction {
       date
     };
   }
+
+export function generateDataMillis(): number{
+  return Math.floor(Date.now()) + Math.floor(Math.random() * moment.duration(7, 'days').asMilliseconds());
+}
 
 function generateCategory(categoryMap: Map<string, string[]>) {
     const keys = Array.from(categoryMap.keys());

@@ -27,18 +27,21 @@ import {
 
 //import { DataTablePagination } from "./data-table-pagination";
 import { DataTableToolbar } from "./data-table-toolbar";
-import { timelineActor } from "@/state/timelineMachine";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   transactionTableid: string;
+  handleRowClick: (rowData: TData, index:number) => void;
+  heightCss: string;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
   transactionTableid,
+  handleRowClick,
+  heightCss
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
@@ -47,7 +50,7 @@ export function DataTable<TData, TValue>({
     []
   );
   const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [activeRows, setActiveRows] = React.useState({}); // State to track active rows
+  //const [activeRows, setActiveRows] = React.useState({}); // State to track active rows
 
   const table = useReactTable({
     data,
@@ -70,32 +73,12 @@ export function DataTable<TData, TValue>({
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues()
   });
-
-  const handleRowClick = (rowIndex) => {
-    setActiveRows((prev) => ({ ...prev, [rowIndex]: !prev[rowIndex] })); // Toggle active state
-    // purejs Table scrolling
-    //https://jsfiddle.net/r753v2ky/ 
-    // Scrolling 
-    //https://stackoverflow.com/questions/7852986/javascript-scroll-to-nth-row-in-a-table
-    // scroll row to mid
-    // line is zero-based
-    // line is the row number that you want to see into view after scroll 
-    const rowdata:any = table.getRowModel().rows[rowIndex]?.original
-    // Send row id in selected event
-    console.log(rowdata.id);
-    timelineActor.send({type:"item.selected.from.table", id: rowdata.id })
-    const rows = document.querySelectorAll(`#${transactionTableid} tr`);  
-    rows[rowIndex].scrollIntoView({
-      behavior: 'smooth',
-      block: 'center'
-  });
-  };
-
+  const tableClassNames = `rounded-md border h-${heightCss} relative overflow-auto`
   return (
     <div className="space-y-4">
       <DataTableToolbar table={table} />
       {/* https://github.com/shadcn-ui/ui/issues/1151 */}
-      <div className="rounded-md border h-[50vh] relative overflow-auto">
+      <div className={tableClassNames}>
         <Table id={transactionTableid}>
           <TableHeader className="sticky top-0 bg-muted">
             {table.getHeaderGroups().map((headerGroup) => (
@@ -121,8 +104,9 @@ export function DataTable<TData, TValue>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
-                  className={activeRows[index] ? 'active' : ''}
-                  onClick={() => handleRowClick(index)}
+                  //TODO
+                  //className={activeRows[index] ? 'active' : ''}
+                  onClick={() => handleRowClick(table.getRowModel().rows[index]?.original, index)}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
