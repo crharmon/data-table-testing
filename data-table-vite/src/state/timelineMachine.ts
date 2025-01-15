@@ -2,7 +2,6 @@ import { IdType, TimelineItem, TimelineOptions } from "vis-timeline";
 import { assign, createActor, log, setup } from "xstate";
 
 // Constants for initial data and reference
-const initialData: TimelineItem[] = [];
 const nullRef: React.MutableRefObject<any> = null;
 
 // Define the types of events that can be sent to the machine
@@ -22,7 +21,6 @@ export const machine = setup({
   },
   types: {
     context: {
-      timelineItems: initialData,
       timelineRef: nullRef,
     },
     events: {} as
@@ -35,7 +33,6 @@ export const machine = setup({
 // Create the machine with the defined states and events
 .createMachine({
   context: {
-    timelineItems: initialData,
     timelineRef: nullRef,
   },
   id: "timelineTest",
@@ -59,18 +56,16 @@ export const machine = setup({
       on: {
         // Handle event 'data.start.update'
         "data.start.update": {
-          target: "dataReceived",
           actions: [
             log("Processing data_start_update"),
-            assign({
-              timelineItems: ({ event }) => event.newTimelineItems,
-            }),
+            ({ context, event }) => {
+              const timeline = context.timelineRef.current?.timeline;
+              if (timeline) {
+                timeline.itemsData.add(event.newTimelineItems);
+              }
+            }
           ],
         },
-      },
-    },
-    dataReceived: {
-      on: {
         // Handle event 'item.selected.from.table'
         "item.selected.from.table": {
           actions: [
@@ -86,10 +81,8 @@ export const machine = setup({
                 timeline.setSelection([]);
                 // Set selected
                 timeline.setSelection([selectedId]);
-                
                 // Move item into view
                 timeline.focus(selectedId);
-                
               }
             },
           ],

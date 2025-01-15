@@ -35,7 +35,7 @@ function generateIncomeTransaction(): Transaction {
   }
   
 
-  function generateExpenseTransaction(): Transaction {
+function generateExpenseTransaction(): Transaction {
     const expenseCategoryMap = new Map<string, string[]>([
       ['Groceries', ['food', 'groceries']],
       ['Electricity Bill', ['electricity bill']],
@@ -124,9 +124,13 @@ function generateVendor(): string {
 const numItems:number = 15;
 
 export const generatedTransactions = Array.from({ length: numItems }, () => {
+  
+});
+
+export function generateTransaction() {
   if (Math.random() < 0.5) {
     return generateIncomeTransaction();
   } else {
     return generateExpenseTransaction();
   }
-});
+}

@@ -19,10 +19,10 @@ export const machine = setup({
      * @param {object} event - The event that triggered this action.
      * @returns {Transaction[]} The updated table data.
      */
-    startDataUpdate: assign({
-      tableData: ({ event }) => {
+    dataUpdate: assign({
+      tableData: ({ event, context }) => {
         assertEvent(event, "data.start.update");
-        return event.tableData;
+        return [...context.tableData, ...event.tableData];
       },
     }),
     /**
@@ -30,7 +30,7 @@ export const machine = setup({
      *
      * @param {object} params - The parameters for this action.
      */
-    startDataUpdate2: (_, params: { newTableData: Transaction[] }) => {
+    dataUpdate2: (_, params: { newTableData: Transaction[] }) => {
       // TODO: implement logic here currently inline action
     },
   },
@@ -67,22 +67,17 @@ export const machine = setup({
   /**
    * Initial state of the machine.
    */
-  initial: "idle",
+  initial: "ready",
   /**
    * States for the machine.
    */
   states: {
-    idle: {
+    ready: {
       on: {
         // Event to start reading data
         "data.start.update": {
-          target: "dataReceived",
-          actions: [log("Processing data.start.update"), "startDataUpdate"],
+          actions: [log("Processing data.start.update"), "dataUpdate"],
         },
-      },
-    },
-    dataReceived: {
-      on: {
         /**
          * Event to select a row from the table.
          */

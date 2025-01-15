@@ -2,12 +2,13 @@ import React from "react";
 import { Button } from "./components/ui/button";
 import { ThemeProvider } from "@/components/theme-provider";
 import { transactionsActor } from "./state/tranctionMachine";
-import { sampleData, Transaction } from "./components/data-table-components/samplet-data";
+import { Transaction } from "./components/data-table-components/samplet-data";
 import { TimelineItem } from "vis-timeline";
 import { useParams } from "react-router-dom";
 import { timelineActor } from "./state/timelineMachine";
 import TimelineComponent from "./components/react-vis-timeline/TimelineComponent";
 import DataTableComponent from "./components/data-table-components/data-table-component";
+import { generateTransaction } from "./components/data-table-components/generatedSample";
 
 /**
  * Converts a transaction to a Vis Timeline Item
@@ -28,16 +29,18 @@ function transactionToTimelineItem(transaction: Transaction): TimelineItem {
 }
 
 function handleClick(): void {
-
+  
+  // Generate new transaction
+  const newTransAct: Transaction = generateTransaction()
   transactionsActor.send({
     type: "data.start.update",
-    tableData: sampleData,
+    tableData: [newTransAct],
   });
 
-  const timelineItems: TimelineItem[] = sampleData.map(transactionToTimelineItem);
+ // const timelineItems: TimelineItem[] = sampleData.map(transactionToTimelineItem);
   timelineActor.send({
     type: "data.start.update",
-    newTimelineItems: timelineItems,
+    newTimelineItems: [transactionToTimelineItem(newTransAct)],
   });
 }
 

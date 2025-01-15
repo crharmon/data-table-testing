@@ -1,11 +1,11 @@
 import React, { useRef } from "react";
 import "./testTimeline.css";
-import { useSelector } from "@xstate/react";
 import { timelineActor } from "@/state/timelineMachine";
 import { Timeline } from "./Timeline";
 import moment from "moment";
 import { TimelineOptions } from "vis-timeline";
 import { transactionsActor } from "@/state/tranctionMachine";
+
 
 // Timeline groups
 const groups = [
@@ -22,15 +22,6 @@ const groups = [
     className: "expense",
   },
 ];
-
-/**
- * Selects the timeline items from the state snapshot
- *
- * @param snapshot - The React Context snapshot
- */
-const selectTimelineItems = (snapshot: any): any[] => {
-  return snapshot.context.timelineItems;
-};
 
 // TSX
 export default function TimelineComponent() {
@@ -98,12 +89,10 @@ export default function TimelineComponent() {
     }
   };
 
-  const timelineItems = useSelector(timelineActor, selectTimelineItems);
-
   return (
     <Timeline
       ref={timelineRef}
-      initialItems={timelineItems}
+      initialItems={[]}
       initialGroups={groups}
       options={localTimelineOptions}
       selectHandler={timelineSelectHandler}
