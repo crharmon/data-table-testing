@@ -83,7 +83,7 @@ export default function TimelineComponent() {
         id: properties.items[0],
       });
       transactionsActor.send({
-        type: "row.selected.from.table",
+        type: "id.selected.from.timeline",
         id: properties.items[0],
       });
     }

@@ -38,7 +38,7 @@ const handleRowClick = (rowData, index) => {
     id: rowData.id,
   });
   transactionsActor.send({
-    type: "row.selected.from.table",
+    type: "id.selected.from.table",
     id: rowData.id,
   });
 };

@@ -48,8 +48,8 @@ export const machine = setup({
     events: {} as
       | { type: "data.start.update"; tableData: Transaction[] }
       | { type: "data.eof.reached" }
-      | { type: "row.selected.from.table"; id: string }
-      | { type: "row.selected.from.timeline"; id: string }
+      | { type: "id.selected.from.table"; id: string }
+      | { type: "id.selected.from.timeline"; id: string }
       | { type: "data.error.reading" },
   },
 }).createMachine({
@@ -81,7 +81,7 @@ export const machine = setup({
         /**
          * Event to select a row from the table.
          */
-        "row.selected.from.table": {
+        "id.selected.from.timeline": {
           actions: [
             log("Processing item.selected.from.table"),
             ({ context, event }) => {
@@ -104,8 +104,12 @@ export const machine = setup({
         /**
          * Event to select a row from the timeline.
          */
-        "row.selected.from.*": {
-          actions: [log("Processing item.selected.from.*")],
+        "id.selected.from.table": {
+          actions: [log("Processing item.selected.from.table"),
+            assign({
+              selectedIds: ({ event }) => [event.id],
+            })
+          ],
         },
       },
     },
